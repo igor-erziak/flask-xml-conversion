@@ -3,3 +3,6 @@
 
 # bytecode
 __pycache__/
+
+# macos specific file
+.DS_Store
