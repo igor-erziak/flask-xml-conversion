@@ -1,15 +1,15 @@
 from flask import Flask, abort
 from flask_httpauth import HTTPBasicAuth
 from os import environ
+import api_helper as ah
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
 
 CREDS = {
-    "username": environ.get("ROSSUM_USERNAME"),
-    "password": environ.get("ROSSUM_PASSWORD")
+    "username": environ.get("APP_USERNAME"),
+    "password": environ.get("APP_PASSWORD")
 }
-ANNOTATION_ID = 123456
 
 @auth.verify_password
 def verify_password(username, password):
@@ -19,8 +19,7 @@ def verify_password(username, password):
 @app.route("/export/<int:annotation_id>")
 @auth.login_required
 def export(annotation_id):
-    if annotation_id == ANNOTATION_ID:
-        return f"Success for user {auth.current_user()} and annotation ID {annotation_id}"
-    else:
-        return f"Wrong annotation id for user {auth.current_user()}"
+    auth_key = ah.get_auth_key()
+    xml = ah.get_annotation_xml(annotation_id, auth_key)
 
+    return f'<h1>Authenticated as {auth.current_user()}</h1>' + '<textarea rows="40" cols="140">' + xml + '</textarea>'
