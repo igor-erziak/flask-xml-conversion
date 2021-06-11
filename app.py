@@ -2,6 +2,7 @@ from flask import Flask, abort
 from flask_httpauth import HTTPBasicAuth
 from os import environ
 import api_helper as ah
+import xml_convertor as xc
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
@@ -22,4 +23,5 @@ def export(annotation_id):
     auth_key = ah.get_auth_key()
     xml = ah.get_annotation_xml(annotation_id, auth_key)
 
-    return f'<h1>Authenticated as {auth.current_user()}</h1>' + '<textarea rows="40" cols="140">' + xml + '</textarea>'
+    converted_xml = xc.convert_xml(xml)
+    return f'<h1>Authenticated as {auth.current_user()}</h1>' + '<textarea rows="40" cols="140">' + converted_xml + '</textarea>'
