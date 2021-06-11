@@ -16,18 +16,18 @@ Finally, the converted xml is submitted in base64-encoded form to the https://my
 
 1. Clone the repository.
 ```
-git clone https://github.com/igor-erziak/rossum-assignment.git
-cd rossum-assignment
+git clone https://github.com/igor-erziak/flask-xml-conversion
+cd flask-xml-conversion
 ```
 
 2. Build the docker image
 ```
-docker build --tag xml_convertor .
+docker build --tag flask-xml-conversion .
 ```
 
 3. Run the image with port `5000` redirected to localhost.
 ```
-docker run --publish 5000:5000 xml_convertor
+docker run --publish 5000:5000 flask-xml-conversion
 ```
 
 ## How to test
@@ -44,6 +44,6 @@ pytest
 2. Get into the docker container to run the tests there (all packages including `pytest` should be already installed there)
 
 ```
-sudo docker run -it --entrypoint /bin/bash xml_convertor
+sudo docker run -it --entrypoint /bin/bash flask-xml-conversion
 pytest
 ```
