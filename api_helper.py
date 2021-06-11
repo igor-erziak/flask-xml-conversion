@@ -1,11 +1,13 @@
 """
-Helper functions to interact with Rossum API (https://api.elis.rossum.ai/v1/).
+Helper functions to interact with Rossum APIs (https://api.elis.rossum.ai/v1/
+and https://my-little-endpoint.ok/rossum).
 """
 
 import requests
 from os import environ
 from urllib.parse import unquote, urlparse
 from pathlib import PurePosixPath
+import base64 as b64
 
 CREDS = {
     'username': environ['ROSSUM_USERNAME'],
@@ -70,3 +72,28 @@ def get_queue_id(annotation_id, auth_key):
         return queue_id
     else:
         return None
+
+def submit_xml(annotation_id, xml):
+    """
+    Submit base64 encoded xml data along with annotation_id to
+    https://my-little-endpoint.ok/rossum and return true on success.
+    """
+
+    encoded_xml = b64.b64encode(xml)
+
+    try:
+        response = requests.post(
+            'https://my-little-endpoint.ok/rossum',
+            json={
+                'annotationId': annotation_id,
+                'content': encoded_xml.decode()
+            }
+        )
+    except Exception:
+        return False
+
+    if response:
+        print(response.text)
+        return True
+    else:
+        return False

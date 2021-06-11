@@ -18,7 +18,7 @@ def convert_xml(input_xml):
     fill_template(template_root, root, input_root)
 
     ET.indent(root)
-    return ET.tostring(root, encoding="unicode")
+    return ET.tostring(root)
 
 def fill_template(template, output, input):
     """

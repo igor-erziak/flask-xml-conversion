@@ -24,4 +24,7 @@ def export(annotation_id):
     xml = ah.get_annotation_xml(annotation_id, auth_key)
 
     converted_xml = xc.convert_xml(xml)
-    return f'<h1>Authenticated as {auth.current_user()}</h1>' + '<textarea rows="40" cols="140">' + converted_xml + '</textarea>'
+
+    result = ah.submit_xml(annotation_id, converted_xml)
+
+    return {"success": result}
