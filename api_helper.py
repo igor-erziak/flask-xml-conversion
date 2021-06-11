@@ -14,12 +14,15 @@ CREDS = {
     'password': environ['ROSSUM_PASSWORD']
 }
 
+ROSSUM_API = 'https://api.elis.rossum.ai/v1'
+LITTLE_ENDPOINT = 'https://my-little-endpoint.ok/rossum'
+
 def get_annotation_xml(annotation_id, auth_key):
     """Return annotation with the specified id in XML format."""
     queue_id = get_queue_id(annotation_id, auth_key)
 
     response = requests.get(
-        f'https://api.elis.rossum.ai/v1/queues/{queue_id}/export',
+        f'{ROSSUM_API}/queues/{queue_id}/export',
         params={
             'status': 'exported',
             'format': 'xml',
@@ -38,7 +41,7 @@ def get_auth_key():
     as env variables.
     """
     response = requests.post(
-        'https://api.elis.rossum.ai/v1/auth/login',
+        f'{ROSSUM_API}/auth/login',
         json={
             'username': CREDS['username'],
             'password': CREDS['password']
@@ -55,7 +58,7 @@ def get_auth_key():
 def get_queue_id(annotation_id, auth_key):
     """Return queue id (int) where the annotation with the given id is located."""
     response = requests.get(
-        f'https://elis.rossum.ai/api/v1/annotations/{annotation_id}',
+        f'{ROSSUM_API}/annotations/{annotation_id}',
         headers={'Authorization': f'token {auth_key}'}
     )
     if response:
@@ -83,7 +86,7 @@ def submit_xml(annotation_id, xml):
 
     try:
         response = requests.post(
-            'https://my-little-endpoint.ok/rossum',
+            LITTLE_ENDPOINT,
             json={
                 'annotationId': annotation_id,
                 'content': encoded_xml.decode()
@@ -93,7 +96,6 @@ def submit_xml(annotation_id, xml):
         return False
 
     if response:
-        print(response.text)
         return True
     else:
         return False
