@@ -65,13 +65,11 @@ def get_queue_id(annotation_id, auth_key):
         json_response = response.json()
         queue_url = json_response['queue']
         queue_url_path = PurePosixPath(
-            unquote(
-                urlparse(
-                    queue_url
-                ).path
-            )
+            urlparse(
+                queue_url
+            ).path
         )
-        queue_id = int(queue_url_path.parts[-1])
+        queue_id = queue_url_path.parts[-1]
         return queue_id
     else:
         return None
