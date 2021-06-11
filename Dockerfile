@@ -17,4 +17,6 @@ FROM base as test
 CMD ["pytest"]
 
 FROM base as build
+ENV FLASK_APP=flask_app
 CMD ["flask", "run", "--host=0.0.0.0"]
+
