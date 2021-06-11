@@ -13,4 +13,6 @@ ENV ROSSUM_PASSWORD=bsMZ7BVsAy0s
 ENV APP_USERNAME=myUser123
 ENV APP_PASSWORD=secretSecret
 
+ENV FLASK_APP=flask_app
+
 CMD ["flask", "run", "--host=0.0.0.0"]

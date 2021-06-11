@@ -5,7 +5,7 @@ and https://my-little-endpoint.ok/rossum).
 
 import requests
 from os import environ
-from urllib.parse import unquote, urlparse
+from urllib.parse import urlparse
 from pathlib import PurePosixPath
 import base64 as b64
 
