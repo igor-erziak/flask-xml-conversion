@@ -2,9 +2,9 @@
 
 ## How it works
 
-The app provides one endpoint `/export` which accepts `annotation_id` as a parameter in path (e.g. `/export/6422949`). In order to access this endpoint the usere has to provide username and password (via BasicAuth).
+The app provides one endpoint `/export` which accepts `annotation_id` as a parameter in path (e.g. `/export/6422949`). In order to access this endpoint the user has to provide username and password (via BasicAuth).
 
-If the user provides valid credentials (internally stored in ENV variables `APP_USERNAME` and `APP_PASSWORD`) and `annotation_id` the applcation internally logs in using another set of credentials (internally stored in ENV variables `ROSSUM_USERNAME` and `ROSSUM_PASSWORD`) into the Rossum Elis API (https://api.elis.rossum.ai/v1/) where it tries to retrieve annotation for a document with the specified id.
+If the user provides valid credentials (internally stored in ENV variables `APP_USERNAME` and `APP_PASSWORD`) and `annotation_id` the applcation internally logs in, using another set of credentials (internally stored in ENV variables `ROSSUM_USERNAME` and `ROSSUM_PASSWORD`), into the Rossum Elis API (https://api.elis.rossum.ai/v1/) where it tries to retrieve annotation for the document with the specified id.
 
 If such a document exists (currently only ids `6439416` and `6422949` exist) the XML representation of the annotation is downloaded and then converted into a different XML format.
 
@@ -30,6 +30,7 @@ docker build --tag flask-xml-conversion .
 docker run --publish 5000:5000 flask-xml-conversion
 ```
 
+4. Access the 
 ## How to test
 
 To run the provided tests, there are two options:
