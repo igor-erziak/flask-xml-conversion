@@ -8,11 +8,16 @@ from os import environ
 from urllib.parse import urlparse
 from pathlib import PurePosixPath
 import base64 as b64
+import sys
 
-CREDS = {
-    'username': environ['ROSSUM_USERNAME'],
-    'password': environ['ROSSUM_PASSWORD']
-}
+try:
+    CREDS = {
+        'username': environ['ROSSUM_USERNAME'],
+        'password': environ['ROSSUM_PASSWORD']
+    }
+except KeyError as e:
+    print(f'KeyError: the environment variable {e} is not set.')
+    sys.exit('Terminating...')
 
 ROSSUM_API = 'https://api.elis.rossum.ai/v1'
 LITTLE_ENDPOINT = 'https://my-little-endpoint.ok/rossum'
@@ -30,10 +35,8 @@ def get_annotation_xml(annotation_id, auth_key):
         },
         headers={'Authorization': f'token {auth_key}'}
     )
-    if response:
-        return response.text
-    else:
-        return None
+    
+    return response.text
 
 def get_auth_key():
     """
@@ -47,13 +50,12 @@ def get_auth_key():
             'password': CREDS['password']
         }
     )
-    if response:
-        json_response = response.json()
-        auth_key = json_response['key']
-        return auth_key
-    else:
-        return None
     
+    json_response = response.json()
+    auth_key = json_response['key']
+    
+    return auth_key
+
 
 def get_queue_id(annotation_id, auth_key):
     """Return queue id (int) where the annotation with the given id is located."""
@@ -61,39 +63,31 @@ def get_queue_id(annotation_id, auth_key):
         f'{ROSSUM_API}/annotations/{annotation_id}',
         headers={'Authorization': f'token {auth_key}'}
     )
-    if response:
-        json_response = response.json()
-        queue_url = json_response['queue']
-        queue_url_path = PurePosixPath(
-            urlparse(
-                queue_url
-            ).path
-        )
-        queue_id = queue_url_path.parts[-1]
-        return queue_id
-    else:
-        return None
+    
+    json_response = response.json()
+    queue_url = json_response['queue']
+    queue_url_path = PurePosixPath(
+        urlparse(
+            queue_url
+        ).path
+    )
+    queue_id = queue_url_path.parts[-1]
+    
+    return queue_id
 
 def submit_xml(annotation_id, xml):
     """
     Submit base64 encoded xml data along with annotation_id to
     https://my-little-endpoint.ok/rossum and return true on success.
     """
-
     encoded_xml = b64.b64encode(xml)
 
-    try:
-        response = requests.post(
-            LITTLE_ENDPOINT,
-            json={
-                'annotationId': annotation_id,
-                'content': encoded_xml.decode()
-            }
-        )
-    except Exception:
-        return False
-
-    if response:
-        return True
-    else:
-        return False
+    response = requests.post(
+        LITTLE_ENDPOINT,
+        json={
+            'annotationId': annotation_id,
+            'content': encoded_xml.decode()
+        }
+    )
+    
+    return response.ok
