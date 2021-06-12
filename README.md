@@ -30,7 +30,8 @@ docker build --tag flask-xml-conversion .
 docker run --publish 5000:5000 flask-xml-conversion
 ```
 
-4. Access the 
+4. Access the application at http://127.0.0.1:5000/
+
 ## How to test
 
 To run the provided tests, there are two options:
