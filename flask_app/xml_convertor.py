@@ -1,6 +1,6 @@
 """
 Functions performing XML conversion from one format to another
-based on an xml template.
+based on an XML template.
 """
 import xml.etree.ElementTree as ET
 
@@ -8,7 +8,6 @@ def convert_xml(input_xml):
     """
     Return XML converted from input_xml to a fromat specified by the template.
     """
-    
     input_root = ET.fromstring(input_xml)
 
     template_tree = ET.parse('template.xml')
