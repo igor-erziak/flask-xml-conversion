@@ -13,14 +13,9 @@ ENV ROSSUM_PASSWORD=your_rossum_password
 ENV APP_USERNAME=myUser123
 ENV APP_PASSWORD=secretSecret
 
-<<<<<<< HEAD
 FROM base as test
 CMD ["pytest"]
 
 FROM base as build
 ENV FLASK_APP=flask_app
 CMD ["flask", "run", "--host=0.0.0.0"]
-
-=======
-***REMOVED***
->>>>>>> a4b3407 (rename main module to app according to convention)
