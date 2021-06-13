@@ -8,16 +8,6 @@ from os import environ
 from urllib.parse import urlparse
 from pathlib import PurePosixPath
 import base64 as b64
-import sys
-
-try:
-    CREDS = {
-        'username': environ['ROSSUM_USERNAME'],
-        'password': environ['ROSSUM_PASSWORD']
-    }
-except KeyError as e:
-    print(f'KeyError: the environment variable {e} is not set.')
-    sys.exit('Terminating...')
 
 ROSSUM_API = 'https://api.elis.rossum.ai/v1'
 LITTLE_ENDPOINT = 'https://my-little-endpoint.ok/rossum'
@@ -38,7 +28,7 @@ def get_annotation_xml(annotation_id, auth_key):
     
     return response.text
 
-def get_auth_key():
+def get_auth_key(username, password):
     """
     Return API authorization key as string using the credentials stored
     as env variables.
@@ -46,11 +36,11 @@ def get_auth_key():
     response = requests.post(
         f'{ROSSUM_API}/auth/login',
         json={
-            'username': CREDS['username'],
-            'password': CREDS['password']
+            'username': username,
+            'password': password
         }
     )
-    
+
     json_response = response.json()
     auth_key = json_response['key']
     

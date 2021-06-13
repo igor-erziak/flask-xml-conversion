@@ -1,33 +1,24 @@
 from flask import Blueprint
+from flask import current_app as app
 import sys
 from os import environ
 from flask_httpauth import HTTPBasicAuth
 from . import api_helper as ah
 from . import xml_convertor as xc
 
-auth = HTTPBasicAuth()
-
 export_bp = Blueprint('export', __name__)
-
-try:
-    CREDS = {
-        "username": environ["APP_USERNAME"],
-        "password": environ["APP_PASSWORD"]
-    }
-except KeyError as e:
-    print(f'KeyError: the environment variable {e} is not set.')
-    sys.exit('Terminating...')
+auth = HTTPBasicAuth()
 
 @auth.verify_password
 def verify_password(username, password):
-    if username == CREDS['username'] and password == CREDS['password']:
+    if username == app.config['APP_USERNAME'] and password == app.config['APP_PASSWORD']:
         return username
 
 @export_bp.route("/export/<int:annotation_id>")
 @auth.login_required
 def export(annotation_id):
     try:
-        auth_key = ah.get_auth_key()
+        auth_key = ah.get_auth_key(app.config['ROSSUM_USERNAME'], app.config['ROSSUM_PASSWORD'])
     except Exception as e:
         print(repr(e))
         return f"Not able to log into Rossum API", 403
