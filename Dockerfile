@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM python:3.9.5-slim-buster
+FROM python:3.9.5-slim-buster as base
 
 WORKDIR /app
 
@@ -13,4 +13,8 @@ ENV ROSSUM_PASSWORD=bsMZ7BVsAy0s
 ENV APP_USERNAME=myUser123
 ENV APP_PASSWORD=secretSecret
 
+FROM base as test
+CMD ["pytest"]
+
+FROM base as build
 CMD ["flask", "run", "--host=0.0.0.0"]
