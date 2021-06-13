@@ -41,3 +41,4 @@ def fill_template(template, output, input):
                 fill_template(child[0], subelement, input_item)
         else:
             fill_template(child, output_element, input)
+
