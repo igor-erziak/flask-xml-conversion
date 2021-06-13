@@ -1,4 +1,4 @@
-from flask import Flask, abort
+from flask import Flask
 from flask_httpauth import HTTPBasicAuth
 from os import environ
 import flask_app.api_helper as ah
