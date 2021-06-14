@@ -27,7 +27,7 @@ docker build --tag xml-conversion .
 
 3. Run the image with port `5000` redirected to localhost.
 ```
-docker run --publish 5000:5000 flask-xml-conversion
+docker run --publish 5000:5000 xml-conversion
 ```
 
 4. Access the application at http://127.0.0.1:5000/
