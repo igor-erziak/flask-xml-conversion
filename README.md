@@ -22,7 +22,7 @@ cd flask-xml-conversion
 
 2. Build the docker image
 ```
-docker build --tag flask-xml-conversion .
+docker build --tag xml-conversion .
 ```
 
 3. Run the image with port `5000` redirected to localhost.
@@ -34,18 +34,14 @@ docker run --publish 5000:5000 flask-xml-conversion
 
 ## How to test
 
-To run the provided tests, there are two options:
-1. Install all pip packages on the local machine in virtual environment and run the tests
+To run the provided test, (re)build the image to the test stage:
 
+1. Build the docker image using the `--target test` option which will cause the container to execute `pytest` as the command (`CMD`) instead of running the flask app itself.
 ```
-python3 -m venv .venv
-pip install -r requirements.txt
-pytest
+docker build -t xml-conversion-test --target test .
 ```
 
-2. Get into the docker container to run the tests there (all packages including `pytest` should be already installed there)
-
+2. Run the tests
 ```
-sudo docker run -it --entrypoint /bin/bash flask-xml-conversion
-pytest
+docker run xml-conversion-test
 ```
