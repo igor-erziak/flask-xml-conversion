@@ -8,7 +8,7 @@ If the user provides valid credentials (internally stored in ENV variables `APP_
 
 If such a document exists (currently only ids `6439416` and `6422949` exist) the XML representation of the annotation is downloaded and then converted into a different XML format.
 
-The conversion is implemented using a `template.xml` file which specifies the structure of the output document. The values are obtained from the downloaded document where the location of the source value is defined by the `from` attribute in the `template.xml` file. For elements that contain a list of elements as their children, the attribute `item` is used to define the corresponding source elements.
+The conversion is implemented using a custom subclass `TransElement` inheriting from `Element`. The design enables to create easy-to-read templates for XML documents in Python code (as seen in `convert_xml` function) with customizable `transform` (lambda) functions to enable conversion between data formats (e.g. `nok` -> `NOK`).
 
 Finally, the converted xml is submitted in base64-encoded form to the https://my-little-endpoint.ok/rossum endpoint along with the `annotation_id`. If the request is successful, the original endpoint (`/export/<annotation_id>`) returns `{ "success": true }`, otherwise it returns `{ "success": false }`.
 
