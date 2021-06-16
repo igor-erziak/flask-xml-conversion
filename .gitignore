@@ -6,3 +6,6 @@ __pycache__/
 
 # macos specific file
 .DS_Store
+
+# local env variable settings
+set_env.sh
