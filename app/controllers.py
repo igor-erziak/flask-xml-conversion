@@ -1,7 +1,5 @@
 from flask import Blueprint
 from flask import current_app as app
-import sys
-from os import environ
 from flask_httpauth import HTTPBasicAuth
 from . import api_helper as ah
 from . import xml_convertor as xc
