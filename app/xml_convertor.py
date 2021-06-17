@@ -2,6 +2,7 @@
 Functions performing XML conversion from one format to another
 based on a template defined by nested TransElements.
 """
+from typing import Type
 import xml.etree.ElementTree as ET
 
 class TransElement(ET.Element):
@@ -26,13 +27,15 @@ class TransElement(ET.Element):
         if self.from_id is not None:
             # find and fill the value applying the tranformation function
             source_element = sourcetree_element.find(f'.//datapoint/[@schema_id="{self.from_id}"]')
-            if source_element is not None:
+            try:
                 source_value = source_element.text
                 self.text = self.transform(source_value)
+            except Exception as e:
+                print(repr(e))
 
         if self.repeated_child is not None:
             # get the source elements
-            source_elements = sourcetree_element.findall(f'.//{self.repeated_child}')
+            source_elements = sourcetree_element.findall(f'.//tuple/[@schema_id="{self.repeated_child}"]')
         
             # call fill on each child with appropriate element
             for i in range(len(source_elements) - 1):
@@ -56,8 +59,8 @@ def convert_xml(input_xml):
         TransElement('Invoices', children=[
             TransElement('Payable', children=[
                 TransElement('InvoiceNumber', from_id='document_id'),
-                TransElement('InvoiceDate', from_id='date_issue'),
-                TransElement('DueDate', from_id='date_due'),
+                TransElement('InvoiceDate', from_id='date_issue', transform=lambda date: date + "T00:00:00"),
+                TransElement('DueDate', from_id='date_due', transform=lambda date: date + "T00:00:00"),
                 TransElement('TotalAmount'),
                 TransElement('Notes'),
                 TransElement('Iban', from_id='iban'),
@@ -65,12 +68,12 @@ def convert_xml(input_xml):
                 TransElement('Currency', from_id='currency', transform=lambda symbol: symbol.upper()),
                 TransElement('Vendor', from_id='sender_name'),
                 TransElement('VendorAddress', from_id='sender_address'),
-                TransElement('Details', repeated_child='tuple', children=[
+                TransElement('Details', repeated_child='line_item', children=[
                     TransElement('Detail', children=[
-                        TransElement('Amount', from_id='item_amount_total'),
+                        TransElement('Amount', from_id='item_total_base'),
                         TransElement('AccountId'),
                         TransElement('Quantity', from_id='item_quantity'),
-                        TransElement('Notes', from_id='item_description')
+                        TransElement('Notes', from_id='item_description', transform=lambda note: note.replace('\n', ' '))
                     ])
                 ])
             ])
@@ -81,6 +84,11 @@ def convert_xml(input_xml):
 
     template.fill_from_source(input_root)
     ET.indent(template)
+
+    with open('input.xml', 'wb') as f:
+        ET.indent(input_root)
+        input_tree = ET.ElementTree(element=input_root)
+        input_tree.write(f)
 
     with open('converted.xml', 'wb') as f:
         temp_tree = ET.ElementTree(element=template)
