@@ -21,13 +21,13 @@ def export(annotation_id):
         auth_key = ah.get_auth_key(app.config['ROSSUM_USERNAME'], app.config['ROSSUM_PASSWORD'])
     except Exception as e:
         print(repr(e))
-        return f"Not able to log into Rossum API", 403
+        return "Not able to log into Rossum API", 403
 
     try:
         xml = ah.get_annotation_xml(annotation_id, auth_key)
     except Exception as e:
         print(repr(e))
-        return f"Not able to retrieve the requested annotation", 404
+        return "Not able to retrieve the requested annotation", 404
 
     converted_xml = xc.convert_xml(xml)
 
@@ -43,4 +43,4 @@ def export(annotation_id):
 @export_bp.route("/")
 @export_bp.route("/export/")
 def index():
-    return 'Go to <a href="/export/6439416">/export/6439416</a>'
+    return 'Go to <a href="/export/6422949">/export/6422949</a>'
