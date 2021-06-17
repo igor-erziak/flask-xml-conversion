@@ -1,9 +1,8 @@
 """
 Functions performing XML conversion from one format to another
-based on an XML template.
+based on a template defined by nested TransElements.
 """
 import xml.etree.ElementTree as ET
-from copy import copy
 
 class TransElement(ET.Element):
     def __init__(self, tag, from_id=None, repeated_child=None, transform=lambda x: x, children=[]):
@@ -66,7 +65,7 @@ def convert_xml(input_xml):
                 TransElement('Currency', from_id='currency', transform=lambda symbol: symbol.upper()),
                 TransElement('Vendor', from_id='sender_name'),
                 TransElement('VendorAddress', from_id='sender_address'),
-                TransElement('Details', repeated_child="tuple", children=[
+                TransElement('Details', repeated_child='tuple', children=[
                     TransElement('Detail', children=[
                         TransElement('Amount', from_id='item_amount_total'),
                         TransElement('AccountId'),
@@ -83,4 +82,8 @@ def convert_xml(input_xml):
     template.fill_from_source(input_root)
     ET.indent(template)
 
+    with open('converted.xml', 'wb') as f:
+        temp_tree = ET.ElementTree(element=template)
+        temp_tree.write(f)
+    
     return ET.tostring(template)
