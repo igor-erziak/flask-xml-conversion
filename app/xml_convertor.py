@@ -2,7 +2,6 @@
 Functions performing XML conversion from one format to another
 based on a template defined by nested TransElements.
 """
-from typing import Type
 import xml.etree.ElementTree as ET
 
 class TransElement(ET.Element):
