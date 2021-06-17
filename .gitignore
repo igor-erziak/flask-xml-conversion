@@ -9,3 +9,6 @@ __pycache__/
 
 # local env variable settings
 set_env.sh
+
+# converted XML file for debugging
+converted.xml
