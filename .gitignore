@@ -12,3 +12,6 @@ set_env.sh
 
 # converted XML file for debugging
 converted.xml
+
+# input XML for debugging
+input.xml
