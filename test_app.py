@@ -13,6 +13,7 @@ def client(app):
 
 def test_export(client):
     """Test the whole export pipeline."""
+    # TODO factor out the credentials
     response = client.get('/export/6422949', auth=('myUser123', 'secretSecret'))
 
     assert response.status_code == 200
