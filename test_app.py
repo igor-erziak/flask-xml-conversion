@@ -17,6 +17,6 @@ def test_export(client):
     response = client.get('/export/6422949', auth=('myUser123', 'secretSecret'))
 
     assert response.status_code == 200
-
+    # check if we got success
     data = response.json
     assert data["success"] == True
