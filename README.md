@@ -1,5 +1,7 @@
 # Flask app for XML conversion
 
+_NOTE: This was a test assignment for a job interview. This is NOT an example of a production-ready application._
+
 ## How it works
 
 The app provides one endpoint `/export` which accepts `annotation_id` as a parameter in path (e.g. `/export/6422949`). In order to access this endpoint the user has to provide username and password (via BasicAuth).
@@ -45,3 +47,5 @@ docker build -t xml-conversion-test --target test .
 ```
 docker run xml-conversion-test
 ```
+
+NOTE: The ENV variables must contain valid username/password pairs in order for the tests to succeed.
